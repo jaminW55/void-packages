@@ -1,0 +1,55 @@
+# Template file for 'the-honkers-railway-launcher-bin'
+pkgname=the-honkers-railway-launcher-bin
+version=1.5.4
+revision=1
+short_desc="A launcher for a specific anime game with auto-patching, discord rpc and time tracking"
+maintainer="jaminW55 <jaminW55@proton.me>"
+license="GPL-3.0"
+homepage="https://github.com/an-anime-team/the-honkers-railway-launcher"
+distfiles="
+    https://github.com/an-anime-team/the-honkers-railway-launcher/releases/download/${version}/honkers-railway-launcher
+    https://raw.githubusercontent.com/an-anime-team/the-honkers-railway-launcher/main/assets/images/icon.png
+    https://raw.githubusercontent.com/an-anime-team/the-honkers-railway-launcher/main/assets/honkers-railway-launcher.desktop
+		"
+checksum="
+	c7ce99c94a629089caa1a7d22ac68dbddfb7a7e81c1e9f447b1b800f7ecf84ee
+ 	1794a73c455a53647f2713777eca9d0feb1da829fb93b5b374cd98ffc27b5c1e
+ 	5a0c6e221317e991f4c3305fb7146f06af8d5dd32df44c1be694ba54f3cef978
+	"
+
+depends=(
+    "libadwaita"
+    "p7zip"
+    "xdg-desktop-portal"
+    "xdelta3"
+    "git"
+    "gtk4"
+    "glibc"
+)
+
+optdepends=(
+    "mangohud: FPS Hud/GUI"
+    "gamemode: Game Optimizations"
+    "gamescope: a tool from Valve that allows for games to run in an isolated Xwayland instance"
+)
+
+nopie=yes
+
+do_extract() {
+    mkdir -p ${wrksrc}
+    cp ${XBPS_SRCDISTDIR}/${pkgname}-${version}/honkers-railway-launcher ${wrksrc}
+    cp ${XBPS_SRCDISTDIR}/${pkgname}-${version}/honkers-railway-launcher.desktop ${wrksrc}
+    cp ${XBPS_SRCDISTDIR}/${pkgname}-${version}/icon.png ${wrksrc}
+}
+
+do_install() {
+    vmkdir usr/lib/${pkgname}
+    vcopy honkers-railway-launcher usr/lib/${pkgname}
+
+    vmkdir usr/bin
+    ln -s /usr/lib/${pkgname}/honkers-railway-launcher ${DESTDIR}/usr/bin/the-honkers-railway-launcher
+
+    vinstall icon.png 644 usr/share/pixmaps/the-honkers-railway-launcher.png
+    vinstall honkers-railway-launcher.desktop 644 usr/share/applications
+    vinstall icon.png 644 usr/share/icons/moe.launcher.the-honkers-railway-launcher.png
+}
